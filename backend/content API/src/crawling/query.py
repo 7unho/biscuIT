@@ -67,6 +67,7 @@ def insert_channel():
                 "helloworld",
                 "engineering",
                 "tistory",
+                "ai",
             ]
         )
         for word in related:
