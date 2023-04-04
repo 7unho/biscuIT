@@ -2,9 +2,9 @@ import tw from "twin.macro";
 import Button from "../common/Button";
 import Modal from "../common/Modal/Modal";
 import AboutInterest from "../OnBoarding/AboutInterest";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { post_about_user } from "../../api/login";
 import DropDown from "../common/DropDown/DropDown";
 
@@ -24,6 +24,13 @@ interface InterestProps {
   title: string;
 }
 
+interface MyInfoContent {
+  nickname: string,
+  job: string,
+	period: number,
+  interest: string[],
+}
+
 const Info = ({title, content}: InfoProps) => {
   return (
     <InfoContainer>
@@ -36,7 +43,6 @@ const Info = ({title, content}: InfoProps) => {
 }
 
 const Interest = ({title}: InterestProps) => {
-  // api로 받아오기
   const [selectList, setSelectList] = useState<string[]>([]);
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
@@ -46,7 +52,7 @@ const Interest = ({title}: InterestProps) => {
     job: "",
     interests: [""],
   });
-  
+
   const isClose = () => {
     return setModalOpen(false);
   }
@@ -114,45 +120,57 @@ export default function EditInfo() {
     { id: 9, content: "9년차" },
     { id: 10, content: "10년 이상" },
   ]
+
+  const yearNumToStr = [
+    "1년 미만", "1년차", "2년차", "3년차", "4년차", 
+    "5년차", "6년차", "7년차", "8년차", "9년차",
+    "10년 이상",
+  ]
   
-  // 얘도 api랑 연결해서 받아오기
+  const queryClient = useQueryClient();
+  const myInfo = queryClient.getQueryData<any>(['get_myInfo']).data as MyInfoContent;
+
   const [jobSelected, setJobSelected] = useState<string>("");
   const [periodSelected, setPeriodSelected] = useState<string>("");
   
+  useEffect(() => {
+    setJobSelected(myInfo.job);
+    setPeriodSelected(yearNumToStr[myInfo.period]);
+  }, [myInfo]);
+
   return (
     <>
-      <Info title="닉네임" content="탐정 제 이름은 코난이죠" />
+      <Info title="닉네임" content={myInfo.nickname} />
+        
+      <InfoContainer>
+        <TitleContainer>
+          <Span>직무</Span>
+        </TitleContainer>
+        <DropDownContainer>
+          <DropDown
+            itemList={jobList} 
+            placeHolder="직무 선택" 
+            selected={jobSelected}
+            setSelected={setJobSelected}
+            isOnboarding={false}
+          />
+        </DropDownContainer>
+      </InfoContainer>
       
-    <InfoContainer>
-      <TitleContainer>
-        <Span>직무</Span>
-      </TitleContainer>
-      <DropDownContainer>
-        <DropDown
-          itemList={jobList} 
-          placeHolder="직무 선택" 
-          selected={jobSelected}
-          setSelected={setJobSelected}
-          isOnboarding={false}
-        />
-      </DropDownContainer>
-    </InfoContainer>
-    
-    <InfoContainer>
-      <TitleContainer>
-        <Span>직무</Span>
-      </TitleContainer>
-      <DropDownContainer>
-        <DropDown 
-          itemList={yearsList} 
-          placeHolder="연차 선택"
-          selected={periodSelected}
-          setSelected={setPeriodSelected}
-          isOnboarding={false}
-        />
-      </DropDownContainer>
-    </InfoContainer>
-
+      <InfoContainer>
+        <TitleContainer>
+          <Span>경력</Span>
+        </TitleContainer>
+        <DropDownContainer>
+          <DropDown 
+            itemList={yearsList} 
+            placeHolder="연차 선택"
+            selected={periodSelected}
+            setSelected={setPeriodSelected}
+            isOnboarding={false}
+          />
+        </DropDownContainer>
+      </InfoContainer>
       <Interest title="관심사"/>
     </>
   )
