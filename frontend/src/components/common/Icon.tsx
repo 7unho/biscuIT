@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 const Logo = tw.img`w-9 h-9 mr-2`;
 
 const Icon = ({ category }: { category: string }) => {
-  const imgSrc = `src/assets/icons/${category}.svg`;
+  const imgSrc = `src/assets/icons/category/${category}.svg`;
   const [isExists, setIsExists] = useState(false);
 
   function checkLocalImgFileExists(imgSrc: string) {
