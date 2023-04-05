@@ -16,6 +16,8 @@ COPY . /usr/src/app
 RUN yarn add tailwindcss@3.2.7
 RUN yarn build
 
+EXPOSE 3000
+
 ###### run stage ######
 FROM nginx:latest
 # c. nginx의 기본 설정을 삭제하고 앱에서 설정한 파일을 복사

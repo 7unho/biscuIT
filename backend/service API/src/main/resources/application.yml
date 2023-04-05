@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    username: dev
+    password: ssafy
+  security:
+      oauth2:
+        client:
+          registration:
+            google:
+              client-id: 1028867835633-rk5376oovhs02qvm3qgkg5oep0tb7l6c.apps.googleusercontent.com
+              client-secret: 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
+              scope: openid, email, profile
+            github:
+              client-id: 8bd323f2720690b79e46
+              client-secret: cac70b7d5d23644d87d993b9c062a271e78b5cbe
+              scope: user:email
+  redis:
+    password: chat6pt
+
+jwt:
+  secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
