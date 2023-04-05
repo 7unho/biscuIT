@@ -116,11 +116,6 @@ const Category = () => {
           // timeFilterArr[timeFilterIdx].end
         ),
       getNextPageParam: (lastPage) => {
-        console.log('lastPage :', lastPage);
-        console.log(
-          'return :',
-          lastPage?.isLast ? undefined : lastPage?.nextLastContentId
-        );
         return lastPage?.isLast ? undefined : lastPage?.nextLastContentId;
       },
       // staleTime: 1000 * 60 * 30,

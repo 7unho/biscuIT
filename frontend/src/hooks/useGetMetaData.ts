@@ -33,6 +33,16 @@ function scrap(doc: Document, url: string) {
   return { image, desc };
 }
 
+const getProxyUrl = (url: string) => {
+  if (url.startsWith('https://blog.kmong.com')) return '/kmong';
+  if (url.startsWith('https://devocean.sk.com/blog')) return '/sk';
+  if (url.startsWith('https://medium.com/coupang-engineering/'))
+    return '/coupang';
+  if (url.startsWith('https://aws.amazon.com/')) return '/aws';
+  if (url.startsWith('https://medium.com/29cm/')) return '/29cm';
+  return url;
+};
+
 export const useGetMetaData = async (url: string) => {
   try {
     const html = await fetch(url, {
@@ -41,7 +51,6 @@ export const useGetMetaData = async (url: string) => {
       // console.log(res);
       return res.text();
     });
-    // console.log('html :', html);
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     const { image, desc } = scrap(doc, url);
